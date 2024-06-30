@@ -36,7 +36,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         Event event = eventList.get(position);
         holder.eventName.setText(event.getName());
         holder.eventLocation.setText(event.getLocation());
-        holder.eventDateTime.setText(event.getDateTime());
+        holder.eventDate.setText(event.getDate());
+        holder.eventTime.setText(event.getTime());
 
         holder.deleteButton.setOnClickListener(v -> listener.onDeleteClick(event));
     }
@@ -51,14 +52,15 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     }
 
     class EventViewHolder extends RecyclerView.ViewHolder {
-        TextView eventName, eventLocation, eventDateTime;
+        TextView eventName, eventLocation, eventDate, eventTime;
         Button deleteButton;
 
         public EventViewHolder(@NonNull View itemView) {
             super(itemView);
             eventName = itemView.findViewById(R.id.text_event_name);
             eventLocation = itemView.findViewById(R.id.text_event_location);
-            eventDateTime = itemView.findViewById(R.id.text_event_datetime);
+            eventDate = itemView.findViewById(R.id.text_event_date);
+            eventTime = itemView.findViewById(R.id.text_event_time);
             deleteButton = itemView.findViewById(R.id.button_delete_event);
         }
     }

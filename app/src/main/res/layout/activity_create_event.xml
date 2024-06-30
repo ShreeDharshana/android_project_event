@@ -126,12 +126,17 @@
         android:id="@+id/btn_upload_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Upload Event Image"
-        android:textSize="18sp"
+        android:layout_gravity="center"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/edit_text_border"
+        android:clickable="true"
+        android:backgroundTint="#A68F6C"
         android:textColor="@android:color/white"
-        android:layout_gravity="center"/>
+        android:focusable="false"
+        android:gravity="center_horizontal"
+        android:minHeight="48dp"
+        android:padding="15dp"
+        android:textSize="18sp"
+        android:text="Upload Event Image" />
 
     <Button
         android:id="@+id/btn_create_event"

@@ -1,22 +1,24 @@
 package com.example.eventplanning;
 
 public class Event {
-    private String id; // Add this field for Firestore document ID
+    private String id;
     private String name;
     private String location;
-    private String dateTime;
+    private String date;
+    private String time;
 
     // Default constructor required for Firestore
     public Event() {}
 
     // Parameterized constructor
-    public Event(String name, String location, String dateTime) {
+    public Event(String name, String location, String date, String time) {
         this.name = name;
         this.location = location;
-        this.dateTime = dateTime;
+        this.date = date;
+        this.time = time;
     }
 
-    // Getter and Setter for id
+    // Getters and Setters for id
     public String getId() {
         return id;
     }
@@ -25,29 +27,36 @@ public class Event {
         this.id = id;
     }
 
-    // Getter methods
+    // Getters and Setters for other fields
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getLocation() {
         return location;
     }
 
-    public String getDateTime() {
-        return dateTime;
-    }
-
-    // Setter methods
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public void setLocation(String location) {
         this.location = location;
     }
 
-    public void setDateTime(String dateTime) {
-        this.dateTime = dateTime;
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }

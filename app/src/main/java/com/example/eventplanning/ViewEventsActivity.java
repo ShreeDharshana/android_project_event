@@ -2,6 +2,8 @@ package com.example.eventplanning;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,6 +27,7 @@ public class ViewEventsActivity extends AppCompatActivity implements EventAdapte
     private EventAdapter eventAdapter;
     private List<Event> eventList;
     private FirebaseFirestore db;
+    private TextView noEventsTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,9 @@ public class ViewEventsActivity extends AppCompatActivity implements EventAdapte
 
         // Initialize Firestore
         db = FirebaseFirestore.getInstance();
+
+        // Initialize TextView for no events message
+        noEventsTextView = findViewById(R.id.text_no_events);
 
         // Fetch events from Firestore
         fetchEvents();
@@ -62,10 +68,21 @@ public class ViewEventsActivity extends AppCompatActivity implements EventAdapte
                             eventList.clear();
                             for (DocumentSnapshot document : queryDocumentSnapshots) {
                                 Event event = document.toObject(Event.class);
-                                event.setId(document.getId());
-                                eventList.add(event);
+                                if (event != null) {
+                                    event.setId(document.getId());
+                                    eventList.add(event);
+                                }
                             }
                             eventAdapter.notifyDataSetChanged();
+
+                            // Show or hide no events message and RecyclerView based on the events list
+                            if (eventList.isEmpty()) {
+                                recyclerView.setVisibility(View.GONE);
+                                noEventsTextView.setVisibility(View.VISIBLE);
+                            } else {
+                                recyclerView.setVisibility(View.VISIBLE);
+                                noEventsTextView.setVisibility(View.GONE);
+                            }
                         }
                     }
                 });
