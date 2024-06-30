@@ -6,6 +6,7 @@
     android:padding="8dp"
     android:background="@drawable/invitation2">
 
+    <!-- Event Name TextView -->
     <TextView
         android:id="@+id/text_event_name"
         android:layout_width="match_parent"
@@ -15,6 +16,7 @@
         android:textStyle="bold"
         android:layout_marginBottom="4dp"/>
 
+    <!-- Event Location TextView -->
     <TextView
         android:id="@+id/text_event_location"
         android:layout_width="match_parent"
@@ -23,6 +25,7 @@
         android:textColor="@android:color/black"
         android:layout_marginBottom="4dp"/>
 
+    <!-- Event DateTime TextView -->
     <TextView
         android:id="@+id/text_event_datetime"
         android:layout_width="match_parent"
@@ -31,17 +34,12 @@
         android:textColor="@android:color/black"
         android:layout_marginBottom="4dp"/>
 
-    <Button
-        android:id="@+id/button_edit_event"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Edit"
-        android:layout_marginTop="8dp"/>
-
+    <!-- Delete Event Button -->
     <Button
         android:id="@+id/button_delete_event"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Delete"
         android:layout_marginTop="8dp"/>
+
 </LinearLayout>

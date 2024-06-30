@@ -61,17 +61,32 @@
         android:padding="16dp"
         android:drawableLeft="@drawable/profile"/>
 
+    <!-- Send Invitation Button -->
+    <Button
+        android:id="@+id/button_send_invitation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Send Invitation"
+        android:textSize="18sp"
+        android:backgroundTint="#4c3228"
+        android:textColor="@android:color/white"
+        android:layout_below="@id/button_manage_profile"
+        android:layout_marginTop="16dp"
+        android:padding="16dp"
+        android:drawableLeft="@drawable/send"/> <!-- Adjust drawable as needed -->
+
     <!-- Logout Button -->
     <Button
         android:id="@+id/button_logout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Logout"
-        android:textSize="18sp"
+        android:textSize="24sp"
         android:backgroundTint="#334C3228"
         android:textColor="#4C3228"
-        android:layout_below="@id/button_manage_profile"
+        android:layout_below="@id/button_send_invitation"
         android:layout_marginTop="16dp"
         android:padding="16dp"
         android:drawableRight="@drawable/arrow"/>
+
 </RelativeLayout>

@@ -1,29 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="8dp"
+    android:background="@drawable/invitation2">
 
+    <!-- Event Name TextView -->
     <TextView
-        android:id="@+id/text_view_event_name"
+        android:id="@+id/text_event_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
         android:textStyle="bold"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="4dp"/>
 
+    <!-- Event Location TextView -->
     <TextView
-        android:id="@+id/text_view_event_location"
+        android:id="@+id/text_event_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:layout_marginBottom="8dp"/>
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="4dp"/>
 
+    <!-- Event DateTime TextView -->
     <TextView
-        android:id="@+id/text_view_event_date_time"
+        android:id="@+id/text_event_date_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:layout_marginBottom="8dp"/>
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="4dp"/>
+
+    <!-- Edit Event Button -->
+    <Button
+        android:id="@+id/button_edit_event"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit"
+        android:layout_marginTop="8dp"/>
+
+    <!-- Delete Event Button -->
+    <Button
+        android:id="@+id/button_delete_event"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        android:layout_marginTop="8dp"/>
+
 </LinearLayout>

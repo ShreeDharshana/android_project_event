@@ -3,6 +3,7 @@ package com.example.eventplanning;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
@@ -20,11 +21,13 @@ import java.util.Map;
 
 public class CreateEventActivity extends AppCompatActivity {
 
+    private static final int PICK_IMAGE_REQUEST = 1;
     private EditText editTextEventName, editTextEventLocation, editTextEventDate, editTextEventTime;
-    private Button buttonCreateEvent;
+    private Button buttonCreateEvent, buttonUploadImage;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+    private Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,7 @@ public class CreateEventActivity extends AppCompatActivity {
         editTextEventDate = findViewById(R.id.edit_text_event_date);
         editTextEventTime = findViewById(R.id.edit_text_event_time);
         buttonCreateEvent = findViewById(R.id.btn_create_event);
+        buttonUploadImage = findViewById(R.id.btn_upload_image);
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -44,6 +48,8 @@ public class CreateEventActivity extends AppCompatActivity {
         editTextEventTime.setOnClickListener(v -> showTimePickerDialog());
 
         buttonCreateEvent.setOnClickListener(v -> createEvent());
+
+        buttonUploadImage.setOnClickListener(v -> openFileChooser());
     }
 
     private void showDatePickerDialog() {
@@ -84,22 +90,22 @@ public class CreateEventActivity extends AppCompatActivity {
         String eventTime = editTextEventTime.getText().toString().trim();
 
         if (TextUtils.isEmpty(eventName)) {
-            Toast.makeText(this, "Please enter the event name", Toast.LENGTH_SHORT).show();
+            editTextEventName.setError("Please enter the event name");
             return;
         }
 
         if (TextUtils.isEmpty(eventLocation)) {
-            Toast.makeText(this, "Please enter the event location", Toast.LENGTH_SHORT).show();
+            editTextEventLocation.setError("Please enter the event location");
             return;
         }
 
         if (TextUtils.isEmpty(eventDate)) {
-            Toast.makeText(this, "Please select the event date", Toast.LENGTH_SHORT).show();
+            editTextEventDate.setError("Please select the event date");
             return;
         }
 
         if (TextUtils.isEmpty(eventTime)) {
-            Toast.makeText(this, "Please select the event time", Toast.LENGTH_SHORT).show();
+            editTextEventTime.setError("Please select the event time");
             return;
         }
 
@@ -110,6 +116,7 @@ public class CreateEventActivity extends AppCompatActivity {
         event.put("date", eventDate);
         event.put("time", eventTime);
         event.put("userId", userId);
+        event.put("timestamp", System.currentTimeMillis()); // Add timestamp
 
         db.collection("events")
                 .add(event)
@@ -122,5 +129,23 @@ public class CreateEventActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> {
                     Toast.makeText(CreateEventActivity.this, "Error creating event: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
+    }
+
+    private void openFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+            imageUri = data.getData();
+            // You can handle the image upload here if needed
+        }
     }
 }

@@ -1,74 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
-    android:orientation="vertical"
-    android:gravity="center"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ManageProfileActivity"
     android:padding="16dp"
-    android:background="@drawable/invitation2">
+    android:background="@drawable/bg_blur"
+    tools:context=".EditProfileActivity">
 
     <!-- Title -->
     <TextView
+        android:id="@+id/app_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Manage Profile"
+        android:text="Edit Profile"
         android:textSize="32sp"
         android:textStyle="bold"
         android:textColor="#4c3228"
-        android:layout_marginBottom="24dp"
-        android:layout_gravity="center"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="200dp"/>
 
-    <!-- Display Name -->
+    <!-- Edit Display Name TextView -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Display Name"
+        android:text="Edit Display Name"
         android:textSize="24sp"
-        android:textStyle="bold"
         android:textColor="#4c3228"
-        android:layout_marginBottom="8dp"
-        android:layout_gravity="start"/>
+        android:textStyle="bold"
+        android:layout_below="@id/app_title"
+        android:layout_marginTop="40dp"/>
 
+    <!-- Edit Display Name EditText -->
     <EditText
         android:id="@+id/edit_text_display_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Display Name"
-        android:textSize="18sp"
+        android:layout_below="@id/app_title"
+        android:layout_marginTop="80dp"
         android:backgroundTint="#DFCEB4"
-        android:padding="10dp"
-        android:minHeight="48dp"
         android:gravity="start"
         android:background="@drawable/edit_text_border"
-        android:layout_marginBottom="20dp" />
+        android:hint="Enter New Display Name"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:padding="10dp"
+        android:textSize="18sp" />
 
-    <!-- Avatar -->
+    <!-- Edit Avatar TextView -->
     <TextView
-        android:id="@+id/text_view_avatar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Avatar"
+        android:text="Edit Avatar"
         android:textSize="24sp"
-        android:textStyle="bold"
         android:textColor="#4c3228"
-        android:layout_marginBottom="8dp"
-        android:layout_gravity="start"/>
+        android:textStyle="bold"
+        android:layout_below="@id/edit_text_display_name"
+        android:layout_marginTop="40dp"/>
 
+    <!-- Edit Avatar ImageView -->
     <ImageView
         android:id="@+id/image_view_avatar"
         android:layout_width="120dp"
         android:layout_height="120dp"
+        android:layout_below="@id/edit_text_display_name"
+        android:layout_marginTop="80dp"
+        android:layout_centerHorizontal="true"
         android:src="@drawable/profile"
         android:contentDescription="Avatar Image"
         android:scaleType="centerCrop"
         android:background="@drawable/edit_text_border"
-        android:padding="10dp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="20dp"/>
+        android:padding="10dp" />
 
+    <!-- Change Avatar Button -->
     <Button
         android:id="@+id/btn_change_avatar"
         android:layout_width="wrap_content"
@@ -77,18 +80,21 @@
         android:textSize="18sp"
         android:backgroundTint="#4c3228"
         android:textColor="@android:color/white"
-        android:layout_gravity="center"
-        android:layout_marginBottom="20dp"/>
+        android:layout_below="@id/image_view_avatar"
+        android:layout_marginTop="40dp"
+        android:layout_centerHorizontal="true"/>
 
+    <!-- Save Changes Button -->
     <Button
-        android:id="@+id/btn_save_profile"
+        android:id="@+id/btn_save_changes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save Profile"
+        android:text="Save Changes"
         android:textSize="24sp"
         android:backgroundTint="#4c3228"
         android:textColor="@android:color/white"
-        android:layout_gravity="center"
-        android:layout_marginBottom="20dp"/>
+        android:layout_below="@id/btn_change_avatar"
+        android:layout_marginTop="40dp"
+        android:layout_centerHorizontal="true"/>
 
-</LinearLayout>
+</RelativeLayout>
