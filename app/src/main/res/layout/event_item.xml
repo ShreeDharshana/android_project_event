@@ -1,57 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="8dp"
+    android:padding="16dp"
     android:background="@drawable/invitation2">
-
-    <!-- Event Name TextView -->
-    <TextView
-        android:id="@+id/text_event_name"
+    <ImageView
+        android:id="@+id/event_image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="28sp"
-        android:textAllCaps="true"
-        android:textColor="@android:color/black"
-        android:textStyle="bold"
-        android:layout_marginBottom="4dp"/>
+        android:layout_height="200dp"
+        android:scaleType="centerCrop" />
 
-    <!-- Event Location TextView -->
     <TextView
-        android:id="@+id/text_event_location"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:textColor="@android:color/black"
-        android:layout_marginBottom="4dp"/>
-
-    <!-- Event Date TextView -->
-    <TextView
-        android:id="@+id/text_event_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:textColor="@android:color/black"
-        android:layout_marginBottom="4dp"/>
-
-    <!-- Event Time TextView -->
-    <TextView
-        android:id="@+id/text_event_time"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:textColor="@android:color/black"
-        android:layout_marginBottom="4dp"/>
-
-    <!-- Delete Event Button -->
-    <Button
-        android:id="@+id/button_delete_event"
+        android:id="@+id/event_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="28dp"
-        android:text="Delete"
-        android:backgroundTint="#4c3228"
-        android:layout_marginTop="8dp"/>
+        android:layout_below="@id/event_image"
+        android:textAllCaps="true"
+        android:layout_marginTop="8dp"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:text="Event Name" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/event_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/event_name"
+        android:layout_marginTop="4dp"
+        android:textSize="22sp"
+        android:textColor="@android:color/black"
+        android:text="Location" />
+
+    <TextView
+        android:id="@+id/event_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/event_location"
+        android:layout_marginTop="4dp"
+        android:textSize="22sp"
+        android:textColor="@android:color/black"
+        android:text="Date" />
+
+    <TextView
+        android:id="@+id/event_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/event_date"
+        android:layout_marginTop="4dp"
+        android:textSize="22sp"
+        android:textColor="@android:color/black"
+        android:text="Time" />
+
+    <Button
+        android:id="@+id/edit_event_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/event_time"
+        android:layout_marginTop="8dp"
+        android:textSize="24sp"
+        android:text="Edit Event"
+        android:textColor="@android:color/white"
+        android:backgroundTint="#4c3228" />
+
+    <Button
+        android:id="@+id/delete_event_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/event_time"
+        android:layout_marginTop="8dp"
+        android:textSize="24sp"
+        android:text="Delete Event"
+        android:textColor="@android:color/white"
+        android:backgroundTint="#5C1212"
+        android:layout_marginStart="16dp"/>
+
+</RelativeLayout>

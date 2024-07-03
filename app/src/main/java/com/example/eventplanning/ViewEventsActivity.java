@@ -1,5 +1,6 @@
 package com.example.eventplanning;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -40,7 +41,7 @@ public class ViewEventsActivity extends AppCompatActivity implements EventAdapte
 
         // Initialize event list and adapter
         eventList = new ArrayList<>();
-        eventAdapter = new EventAdapter(this, eventList, this);
+        eventAdapter = new EventAdapter(eventList, this);
         recyclerView.setAdapter(eventAdapter);
 
         // Initialize Firestore
@@ -89,6 +90,14 @@ public class ViewEventsActivity extends AppCompatActivity implements EventAdapte
     }
 
     @Override
+    public void onEventClick(Event event) {
+        // Handle event item click
+        Intent intent = new Intent(this, EditEventActivity.class);
+        intent.putExtra("EVENT_ID", event.getId());
+        startActivity(intent);
+    }
+
+    @Override
     public void onDeleteClick(Event event) {
         // Handle delete click
         db.collection("events").document(event.getId())
@@ -97,6 +106,9 @@ public class ViewEventsActivity extends AppCompatActivity implements EventAdapte
                     Toast.makeText(ViewEventsActivity.this, "Event deleted", Toast.LENGTH_SHORT).show();
                     fetchEvents(); // Refresh the events list
                 })
-                .addOnFailureListener(e -> Toast.makeText(ViewEventsActivity.this, "Failed to delete event", Toast.LENGTH_SHORT).show());
+                .addOnFailureListener(e -> {
+                    Log.e("ViewEventsActivity", "Failed to delete event", e);
+                    Toast.makeText(ViewEventsActivity.this, "Failed to delete event", Toast.LENGTH_SHORT).show();
+                });
     }
 }

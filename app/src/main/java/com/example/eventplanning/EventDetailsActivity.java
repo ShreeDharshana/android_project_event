@@ -4,18 +4,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class EventDetailsActivity extends AppCompatActivity {
 
-    private TextView textEventName;
-    private TextView textEventLocation;
-    private TextView textEventDateTime;
-    private Button buttonEditEvent;
-    private Button buttonDeleteEvent;
+    private TextView textEventName, textEventLocation, textEventDate, textEventTime;
+    private ImageView imageEvent;
+    private Button buttonEditEvent, buttonDeleteEvent;
+    private FirebaseFirestore db;
+    private String eventId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,42 +26,69 @@ public class EventDetailsActivity extends AppCompatActivity {
         // Initialize views
         textEventName = findViewById(R.id.text_event_name);
         textEventLocation = findViewById(R.id.text_event_location);
-        textEventDateTime = findViewById(R.id.text_event_date_time);
+        textEventDate = findViewById(R.id.text_event_date);
+        textEventTime = findViewById(R.id.text_event_time);
+        imageEvent = findViewById(R.id.image_event);
         buttonEditEvent = findViewById(R.id.button_edit_event);
         buttonDeleteEvent = findViewById(R.id.button_delete_event);
 
-        // Retrieve event details from intent
-        Intent intent = getIntent();
-        String eventName = intent.getStringExtra("eventName");
-        String eventLocation = intent.getStringExtra("eventLocation");
-        String eventDateTime = intent.getStringExtra("eventDateTime");
+        db = FirebaseFirestore.getInstance();
 
-        // Set event details to TextViews
-        textEventName.setText(eventName);
-        textEventLocation.setText(eventLocation);
-        textEventDateTime.setText(eventDateTime);
+        // Get event ID from Intent
+        eventId = getIntent().getStringExtra("EVENT_ID");
 
-        // Edit event button click listener
+        // Load event data
+        loadEventData();
+
+        // Set up button listeners
         buttonEditEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Implement edit event functionality
-                // Example: Launch EditEventActivity or fragment
-                // Intent editIntent = new Intent(EventDetailActivity.this, EditEventActivity.class);
-                // editIntent.putExtra("eventName", eventName);
-                // editIntent.putExtra("eventLocation", eventLocation);
-                // editIntent.putExtra("eventDateTime", eventDateTime);
-                // startActivity(editIntent);
+                Intent intent = new Intent(EventDetailsActivity.this, EditEventActivity.class);
+                intent.putExtra("EVENT_ID", eventId);
+                startActivity(intent);
             }
         });
 
-        // Delete event button click listener
         buttonDeleteEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Implement delete event functionality
-                // Example: Show confirmation dialog and delete event
+                deleteEvent();
             }
         });
+    }
+
+    private void loadEventData() {
+        db.collection("events").document(eventId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String eventName = documentSnapshot.getString("name");
+                        String eventLocation = documentSnapshot.getString("location");
+                        String eventDate = documentSnapshot.getString("date");
+                        String eventTime = documentSnapshot.getString("time");
+                        String eventImage = documentSnapshot.getString("image");
+
+                        textEventName.setText(eventName);
+                        textEventLocation.setText(eventLocation);
+                        textEventDate.setText(eventDate);
+                        textEventTime.setText(eventTime);
+
+                        // Load event image using your preferred image loading library (e.g., Glide or Picasso)
+                    } else {
+                        Toast.makeText(this, "Event not found", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(e -> Toast.makeText(this, "Failed to load event", Toast.LENGTH_SHORT).show());
+    }
+
+    private void deleteEvent() {
+        db.collection("events").document(eventId)
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(EventDetailsActivity.this, "Event deleted successfully", Toast.LENGTH_SHORT).show();
+                    finish();
+                })
+                .addOnFailureListener(e -> Toast.makeText(EventDetailsActivity.this, "Failed to delete event", Toast.LENGTH_SHORT).show());
     }
 }

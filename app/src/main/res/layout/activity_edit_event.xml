@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/edit_event_bg">
+
+    <ImageView
+        android:id="@+id/edit_event_image"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerCrop" />
+
+    <EditText
+        android:id="@+id/edit_event_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_event_image"
+        android:layout_margin="16dp"
+        android:hint="Event Name"
+        android:textColorHint="@color/white"
+        android:textColor="@android:color/white" />
+
+    <EditText
+        android:id="@+id/edit_event_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_event_name"
+        android:layout_margin="16dp"
+        android:textColorHint="@color/white"
+        android:hint="Location"
+        android:textColor="@android:color/white" />
+
+    <EditText
+        android:id="@+id/edit_event_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_event_location"
+        android:layout_margin="16dp"
+        android:textColorHint="@color/white"
+        android:hint="Date"
+        android:textColor="@android:color/white"/>
+
+    <EditText
+        android:id="@+id/edit_event_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_event_date"
+        android:layout_margin="16dp"
+        android:textColorHint="@color/white"
+        android:hint="Time"
+        android:textColor="@android:color/white" />
+
+    <Button
+        android:id="@+id/save_event_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_event_time"
+        android:layout_centerHorizontal="true"
+        android:textColorHint="@color/white"
+        android:backgroundTint="#4c3228"
+        android:layout_margin="16dp"
+        android:textSize="32sp"
+        android:text="Save Event"
+        android:textColor="@android:color/white" />
+
+</RelativeLayout>

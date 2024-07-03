@@ -1,67 +1,86 @@
 package com.example.eventplanning;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
 
-    private Context context;
-    private List<Event> eventList;
-    private OnEventClickListener listener;
+    public interface OnEventClickListener {
+        void onEventClick(Event event);
+        void onDeleteClick(Event event);
+    }
 
-    public EventAdapter(Context context, List<Event> eventList, OnEventClickListener listener) {
-        this.context = context;
-        this.eventList = eventList;
+    private final List<Event> events;
+    private final OnEventClickListener listener;
+
+    public EventAdapter(List<Event> events, OnEventClickListener listener) {
+        this.events = events;
         this.listener = listener;
     }
 
     @NonNull
     @Override
     public EventViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.event_item, parent, false);
-        return new EventViewHolder(view);
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.event_item, parent, false);
+        return new EventViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull EventViewHolder holder, int position) {
-        Event event = eventList.get(position);
-        holder.eventName.setText(event.getName());
-        holder.eventLocation.setText(event.getLocation());
-        holder.eventDate.setText(event.getDate());
-        holder.eventTime.setText(event.getTime());
-
-        holder.deleteButton.setOnClickListener(v -> listener.onDeleteClick(event));
+        Event currentEvent = events.get(position);
+        holder.bind(currentEvent, listener);
     }
 
     @Override
     public int getItemCount() {
-        return eventList.size();
+        return events.size();
     }
 
-    public interface OnEventClickListener {
-        void onDeleteClick(Event event);
-    }
+    public static class EventViewHolder extends RecyclerView.ViewHolder {
 
-    class EventViewHolder extends RecyclerView.ViewHolder {
-        TextView eventName, eventLocation, eventDate, eventTime;
-        Button deleteButton;
+        private final TextView eventName;
+        private final TextView eventLocation;
+        private final TextView eventDate;
+        private final TextView eventTime;
+        private final ImageView eventImage;
+        private final Button editButton;
+        private final Button deleteButton;
 
-        public EventViewHolder(@NonNull View itemView) {
+        public EventViewHolder(View itemView) {
             super(itemView);
-            eventName = itemView.findViewById(R.id.text_event_name);
-            eventLocation = itemView.findViewById(R.id.text_event_location);
-            eventDate = itemView.findViewById(R.id.text_event_date);
-            eventTime = itemView.findViewById(R.id.text_event_time);
-            deleteButton = itemView.findViewById(R.id.button_delete_event);
+            eventName = itemView.findViewById(R.id.event_name);
+            eventLocation = itemView.findViewById(R.id.event_location);
+            eventDate = itemView.findViewById(R.id.event_date);
+            eventTime = itemView.findViewById(R.id.event_time);
+            eventImage = itemView.findViewById(R.id.event_image);
+            editButton = itemView.findViewById(R.id.edit_event_button);
+            deleteButton = itemView.findViewById(R.id.delete_event_button);
+        }
+
+        public void bind(final Event event, final OnEventClickListener listener) {
+            eventName.setText(event.getName());
+            eventLocation.setText(event.getLocation());
+            eventDate.setText(event.getDate());
+            eventTime.setText(event.getTime());
+            Glide.with(itemView.getContext())
+                    .load(event.getImage())
+                    .into(eventImage);
+
+            itemView.setOnClickListener(v -> listener.onEventClick(event));
+            editButton.setOnClickListener(v -> listener.onEventClick(event));
+            deleteButton.setOnClickListener(v -> listener.onDeleteClick(event));
         }
     }
 }
