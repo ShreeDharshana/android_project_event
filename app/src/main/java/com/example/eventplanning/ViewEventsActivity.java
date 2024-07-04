@@ -2,16 +2,20 @@ package com.example.eventplanning;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -19,38 +23,21 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
-import java.util.List;
+public class ViewEventsActivity extends AppCompatActivity {
 
-public class ViewEventsActivity extends AppCompatActivity implements EventAdapter.OnEventClickListener {
-
-    private RecyclerView recyclerView;
-    private EventAdapter eventAdapter;
-    private List<Event> eventList;
-    private FirebaseFirestore db;
+    private LinearLayout eventsContainer;
     private TextView noEventsTextView;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_events);
 
-        // Initialize RecyclerView and layout manager
-        recyclerView = findViewById(R.id.recycler_view_events);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        // Initialize event list and adapter
-        eventList = new ArrayList<>();
-        eventAdapter = new EventAdapter(eventList, this);
-        recyclerView.setAdapter(eventAdapter);
-
-        // Initialize Firestore
+        eventsContainer = findViewById(R.id.events_container);
+        noEventsTextView = findViewById(R.id.no_events_text_view);
         db = FirebaseFirestore.getInstance();
 
-        // Initialize TextView for no events message
-        noEventsTextView = findViewById(R.id.text_no_events);
-
-        // Fetch events from Firestore
         fetchEvents();
     }
 
@@ -61,54 +48,65 @@ public class ViewEventsActivity extends AppCompatActivity implements EventAdapte
                     @Override
                     public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
                         if (e != null) {
-                            Log.w("ViewEventsActivity", "Listen failed.", e);
                             return;
                         }
 
                         if (queryDocumentSnapshots != null) {
-                            eventList.clear();
-                            for (DocumentSnapshot document : queryDocumentSnapshots) {
-                                Event event = document.toObject(Event.class);
-                                if (event != null) {
-                                    event.setId(document.getId());
-                                    eventList.add(event);
-                                }
-                            }
-                            eventAdapter.notifyDataSetChanged();
-
-                            // Show or hide no events message and RecyclerView based on the events list
-                            if (eventList.isEmpty()) {
-                                recyclerView.setVisibility(View.GONE);
+                            eventsContainer.removeAllViews();
+                            if (queryDocumentSnapshots.isEmpty()) {
                                 noEventsTextView.setVisibility(View.VISIBLE);
                             } else {
-                                recyclerView.setVisibility(View.VISIBLE);
                                 noEventsTextView.setVisibility(View.GONE);
+                                for (DocumentSnapshot document : queryDocumentSnapshots) {
+                                    Event event = document.toObject(Event.class);
+                                    if (event != null) {
+                                        event.setId(document.getId());
+                                        addEventView(event);
+                                    }
+                                }
                             }
                         }
                     }
                 });
     }
 
-    @Override
-    public void onEventClick(Event event) {
-        // Handle event item click
-        Intent intent = new Intent(this, EditEventActivity.class);
-        intent.putExtra("EVENT_ID", event.getId());
-        startActivity(intent);
-    }
+    private void addEventView(final Event event) {
+        View eventView = LayoutInflater.from(this).inflate(R.layout.event_item, eventsContainer, false);
 
-    @Override
-    public void onDeleteClick(Event event) {
-        // Handle delete click
-        db.collection("events").document(event.getId())
-                .delete()
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(ViewEventsActivity.this, "Event deleted", Toast.LENGTH_SHORT).show();
-                    fetchEvents(); // Refresh the events list
-                })
-                .addOnFailureListener(e -> {
-                    Log.e("ViewEventsActivity", "Failed to delete event", e);
-                    Toast.makeText(ViewEventsActivity.this, "Failed to delete event", Toast.LENGTH_SHORT).show();
-                });
+        TextView eventName = eventView.findViewById(R.id.event_name);
+        TextView eventLocation = eventView.findViewById(R.id.event_location);
+        TextView eventDate = eventView.findViewById(R.id.event_date);
+        TextView eventTime = eventView.findViewById(R.id.event_time);
+        ImageView eventImage = eventView.findViewById(R.id.event_image);
+        Button editButton = eventView.findViewById(R.id.edit_event_button);
+        Button deleteButton = eventView.findViewById(R.id.delete_event_button);
+
+        eventName.setText(event.getName());
+        eventLocation.setText(event.getLocation());
+        eventDate.setText(event.getDate());
+        eventTime.setText(event.getTime());
+
+        if (event.getImage() != null && !event.getImage().isEmpty()) {
+            Glide.with(this).load(event.getImage()).into(eventImage);
+        }
+
+        editButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ViewEventsActivity.this, EditEventActivity.class);
+            intent.putExtra("EVENT_ID", event.getId());
+            startActivity(intent);
+        });
+
+        deleteButton.setOnClickListener(v -> {
+            db.collection("events").document(event.getId())
+                    .delete()
+                    .addOnSuccessListener(aVoid -> {
+                        Toast.makeText(ViewEventsActivity.this, "Event deleted", Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(ViewEventsActivity.this, "Failed to delete event", Toast.LENGTH_SHORT).show();
+                    });
+        });
+
+        eventsContainer.addView(eventView);
     }
 }

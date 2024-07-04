@@ -1,11 +1,21 @@
 package com.example.eventplanning;
 
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.internal.ICameraUpdateFactoryDelegate;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 public class LocationServices extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -14,20 +24,23 @@ public class LocationServices extends AppCompatActivity implements OnMapReadyCal
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_location_services);
 
-        // Initialize SupportMapFragment
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.id_map);
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(this);
-        }
+        mapFragment.getMapAsync(this);
+
+
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        // The GoogleMap object is ready to be used
-        gMap = googleMap;
+    public void onMapReady(@NonNull GoogleMap googleMap) {
 
-        // Add your map setup code here (e.g., adding markers, changing the map type)
+        LatLng location = new LatLng(13.0843, 80.2705);
+        googleMap.addMarker(new MarkerOptions().position(location).title("TamilNadu"));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location,12));
+
+
     }
 }

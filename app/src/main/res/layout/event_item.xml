@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:padding="16dp"
     android:background="@drawable/invitation2">
+
     <ImageView
         android:id="@+id/event_image"
         android:layout_width="match_parent"
@@ -73,7 +74,6 @@
         android:textSize="24sp"
         android:text="Delete Event"
         android:textColor="@android:color/white"
-        android:backgroundTint="#5C1212"
-        android:layout_marginStart="16dp"/>
+        android:backgroundTint="#5C1212" />
 
 </RelativeLayout>

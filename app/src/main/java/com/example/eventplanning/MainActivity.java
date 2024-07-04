@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
         buttonSendInvitation = findViewById(R.id.button_send_invitation);
         buttonLocation = findViewById(R.id.button_location);
         buttonLogout = findViewById(R.id.button_logout);
-
         mAuth = FirebaseAuth.getInstance();
 
         buttonCreateEvent.setOnClickListener(new View.OnClickListener() {
@@ -81,11 +80,5 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_view_events, menu);
-        return true;
     }
 }

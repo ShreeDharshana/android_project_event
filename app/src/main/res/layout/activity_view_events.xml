@@ -2,26 +2,29 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/invitation2"> <!-- Set your desired background drawable -->
+    android:background="@drawable/invitation2">
 
-    <!-- RecyclerView for displaying events -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_events"
+    <!-- LinearLayout for displaying events -->
+    <LinearLayout
+        android:id="@+id/events_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:padding="16dp"
-        android:visibility="gone"/> <!-- Initially hidden -->
+        android:layout_alignParentTop="true"
+        android:layout_above="@id/no_events_text_view" />
 
     <!-- TextView for displaying no events message -->
     <TextView
-        android:id="@+id/text_no_events"
+        android:id="@+id/no_events_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="No events to Display!!!"
         android:textSize="28sp"
         android:textStyle="bold"
         android:textColor="#4c3228"
-        android:layout_centerInParent="true"
-        android:visibility="visible"/> <!-- Initially visible -->
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:visibility="visible" />
 
 </RelativeLayout>
