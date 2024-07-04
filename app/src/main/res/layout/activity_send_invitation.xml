@@ -19,16 +19,6 @@
         android:layout_marginBottom="20dp"
         android:layout_gravity="center"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Invitee Email"
-        android:textSize="22sp"
-        android:textColor="#4c3228"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp"
-        android:layout_gravity="start"/>
-
     <EditText
         android:id="@+id/edit_text_invitee_email"
         android:layout_width="match_parent"
@@ -54,5 +44,4 @@
         android:backgroundTint="#4c3228"
         android:textColor="@android:color/white"
         android:layout_gravity="center"/>
-
 </LinearLayout>

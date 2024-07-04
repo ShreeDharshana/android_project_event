@@ -17,7 +17,7 @@
         android:textStyle="bold"
         android:textColor="#4c3228"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="200dp"/>
+        android:layout_marginTop="150dp"/>
 
     <!-- Create Event Button -->
     <Button
@@ -75,6 +75,19 @@
         android:padding="16dp"
         android:drawableLeft="@drawable/send"/> <!-- Adjust drawable as needed -->
 
+    <Button
+        android:id="@+id/button_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Location"
+        android:textSize="18sp"
+        android:backgroundTint="#4c3228"
+        android:textColor="@android:color/white"
+        android:layout_below="@id/button_send_invitation"
+        android:layout_marginTop="16dp"
+        android:padding="16dp"
+        android:drawableLeft="@drawable/location_pin_24"/>
+
     <!-- Logout Button -->
     <Button
         android:id="@+id/button_logout"
@@ -84,7 +97,7 @@
         android:textSize="24sp"
         android:backgroundTint="#334C3228"
         android:textColor="#4C3228"
-        android:layout_below="@id/button_send_invitation"
+        android:layout_below="@id/button_location"
         android:layout_marginTop="16dp"
         android:padding="16dp"
         android:drawableRight="@drawable/arrow"/>

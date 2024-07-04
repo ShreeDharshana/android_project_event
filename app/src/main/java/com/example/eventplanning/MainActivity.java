@@ -14,7 +14,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button buttonCreateEvent, buttonViewEvents, buttonManageProfile,buttonSendInvitation, buttonLogout;
+    private Button buttonCreateEvent, buttonViewEvents, buttonManageProfile,buttonSendInvitation, buttonLocation, buttonLogout;
     private FirebaseAuth mAuth;
 
     @Override
@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         buttonViewEvents = findViewById(R.id.button_view_events);
         buttonManageProfile = findViewById(R.id.button_manage_profile);
         buttonSendInvitation = findViewById(R.id.button_send_invitation);
+        buttonLocation = findViewById(R.id.button_location);
         buttonLogout = findViewById(R.id.button_logout);
 
         mAuth = FirebaseAuth.getInstance();
@@ -58,6 +59,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SendInvitationActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        buttonLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, LocationServices.class);
                 startActivity(intent);
             }
         });

@@ -1,6 +1,12 @@
 buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
     dependencies {
         classpath(libs.google.services)
+        classpath("com.google.gms:google-services:4.3.15") // Check for latest version
+
     }
 }
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
