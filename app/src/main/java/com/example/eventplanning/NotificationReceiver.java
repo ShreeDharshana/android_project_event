@@ -12,24 +12,28 @@ import androidx.core.app.NotificationCompat;
 
 public class NotificationReceiver extends BroadcastReceiver {
 
+    private static final String CHANNEL_ID = "EVENT_NOTIFICATION_CHANNEL";
+    private static final String TAG = "NotificationReceiver";
+
     @Override
     public void onReceive(Context context, Intent intent) {
         String eventName = intent.getStringExtra("EVENT_NAME");
+        Log.d(TAG, "Received broadcast with event name: " + eventName);
+
         if (eventName != null) {
             showNotification(context, eventName);
         } else {
-            Log.e("NotificationReceiver", "Event name is null");
+            Log.e(TAG, "Event name is null");
         }
     }
 
     private void showNotification(Context context, String eventName) {
-        String channelId = "EVENT_NOTIFICATION_CHANNEL";
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         // Create notification channel if needed (API 26+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
-                    channelId,
+                    CHANNEL_ID,
                     "Event Notifications",
                     NotificationManager.IMPORTANCE_HIGH
             );
@@ -38,15 +42,15 @@ public class NotificationReceiver extends BroadcastReceiver {
         }
 
         // Build the notification
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
-                .setSmallIcon(R.drawable.ic_notification) // Set your own icon
-                .setContentTitle("Event Reminder")
-                .setContentText("Your event '" + eventName + "' is starting soon.")
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_notification) // Replace with your icon
+                .setContentTitle("Event Created")
+                .setContentText("Your event '" + eventName + "' has been created.")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true);
 
         // Show the notification
         notificationManager.notify(1, builder.build());
-        Log.d("NotificationReceiver", "Notification shown for event: " + eventName);
+        Log.d(TAG, "Notification shown for event: " + eventName);
     }
 }

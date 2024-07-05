@@ -1,6 +1,8 @@
 package com.example.eventplanning;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +15,7 @@ public class SendInvitationActivity extends AppCompatActivity {
 
     private EditText editTextInviteeEmail;
     private Button buttonSendInvitation;
+    private DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +24,7 @@ public class SendInvitationActivity extends AppCompatActivity {
 
         editTextInviteeEmail = findViewById(R.id.edit_text_invitee_email);
         buttonSendInvitation = findViewById(R.id.btn_send_invitation);
+        dbHelper = new DBHelper(this);
 
         buttonSendInvitation.setOnClickListener(v -> sendInvitation());
     }
@@ -33,6 +37,9 @@ public class SendInvitationActivity extends AppCompatActivity {
             return;
         }
 
+        // Save the invitation in the SQLite database
+        saveInvitationToDatabase(inviteeEmail);
+
         // Create an email intent
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
@@ -44,6 +51,21 @@ public class SendInvitationActivity extends AppCompatActivity {
             startActivity(Intent.createChooser(intent, "Send Email"));
         } catch (android.content.ActivityNotFoundException ex) {
             Toast.makeText(SendInvitationActivity.this, "No email clients installed.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void saveInvitationToDatabase(String email) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(DBHelper.COLUMN_EMAIL, email);
+
+        long newRowId = db.insert(DBHelper.TABLE_INVITATIONS, null, values);
+
+        if (newRowId == -1) {
+            Toast.makeText(SendInvitationActivity.this, "Failed to save invitation.", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(SendInvitationActivity.this, "Invitation saved.", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -1,17 +1,22 @@
 package com.example.eventplanning;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,7 +31,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +38,8 @@ import java.util.Map;
 public class CreateEventActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
+    private static final String CHANNEL_ID = "EVENT_NOTIFICATION_CHANNEL";
+    private static final String TAG = "CreateEventActivity";
 
     private EditText eventNameEditText, eventLocationEditText, eventDateEditText, eventTimeEditText;
     private Button createEventButton, uploadImageButton;
@@ -163,6 +169,39 @@ public class CreateEventActivity extends AppCompatActivity {
         }
     }
 
+    private void sendNotification(String eventName) {
+        Intent intent = new Intent(this, NotificationReceiver.class);
+        intent.putExtra("EVENT_NAME", eventName);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this,
+                0,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE
+        );
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Calendar calendar = Calendar.getInstance();
+
+        alarmManager.set(
+                AlarmManager.RTC_WAKEUP,
+                calendar.getTimeInMillis(),
+                pendingIntent
+        );
+
+        // Create notification channel if needed (API 26+)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            NotificationChannel channel = new NotificationChannel(
+                    CHANNEL_ID,
+                    "Event Notifications",
+                    NotificationManager.IMPORTANCE_HIGH
+            );
+            channel.setDescription("Channel for event notifications");
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
     private void createEvent() {
         String eventName = eventNameEditText.getText().toString();
         String eventLocation = eventLocationEditText.getText().toString();
@@ -179,10 +218,16 @@ public class CreateEventActivity extends AppCompatActivity {
         event.put("location", eventLocation);
         event.put("date", eventDate);
         event.put("time", eventTime);
+        event.put("timestamp", System.currentTimeMillis()); // Add timestamp field
 
         db.collection("events")
                 .add(event)
-                .addOnSuccessListener(documentReference -> Toast.makeText(CreateEventActivity.this, "Event Created", Toast.LENGTH_SHORT).show())
+                .addOnSuccessListener(documentReference -> {
+                    Toast.makeText(CreateEventActivity.this, "Event Created", Toast.LENGTH_SHORT).show();
+
+                    // Send notification immediately
+                    sendNotification(eventName);
+                })
                 .addOnFailureListener(e -> Toast.makeText(CreateEventActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 }

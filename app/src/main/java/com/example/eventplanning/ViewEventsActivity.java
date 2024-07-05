@@ -4,9 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -43,7 +41,7 @@ public class ViewEventsActivity extends AppCompatActivity {
 
     private void fetchEvents() {
         db.collection("events")
-                .orderBy("date", Query.Direction.ASCENDING)
+                .orderBy("timestamp", Query.Direction.DESCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
@@ -51,20 +49,18 @@ public class ViewEventsActivity extends AppCompatActivity {
                             return;
                         }
 
-                        if (queryDocumentSnapshots != null) {
-                            eventsContainer.removeAllViews();
-                            if (queryDocumentSnapshots.isEmpty()) {
-                                noEventsTextView.setVisibility(View.VISIBLE);
-                            } else {
-                                noEventsTextView.setVisibility(View.GONE);
-                                for (DocumentSnapshot document : queryDocumentSnapshots) {
-                                    Event event = document.toObject(Event.class);
-                                    if (event != null) {
-                                        event.setId(document.getId());
-                                        addEventView(event);
-                                    }
+                        eventsContainer.removeAllViews();
+                        if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                            noEventsTextView.setVisibility(View.GONE);
+                            for (DocumentSnapshot document : queryDocumentSnapshots) {
+                                Event event = document.toObject(Event.class);
+                                if (event != null) {
+                                    event.setId(document.getId());
+                                    addEventView(event);
                                 }
                             }
+                        } else {
+                            noEventsTextView.setVisibility(View.VISIBLE);
                         }
                     }
                 });
@@ -101,6 +97,7 @@ public class ViewEventsActivity extends AppCompatActivity {
                     .delete()
                     .addOnSuccessListener(aVoid -> {
                         Toast.makeText(ViewEventsActivity.this, "Event deleted", Toast.LENGTH_SHORT).show();
+                        fetchEvents(); // Refresh the events list after deletion
                     })
                     .addOnFailureListener(e -> {
                         Toast.makeText(ViewEventsActivity.this, "Failed to delete event", Toast.LENGTH_SHORT).show();

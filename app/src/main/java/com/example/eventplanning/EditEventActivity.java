@@ -17,6 +17,7 @@ public class EditEventActivity extends AppCompatActivity {
     private ImageView eventImageView;
     private Button saveEventButton;
     private String eventId;
+    private long eventTimestamp;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,6 +53,7 @@ public class EditEventActivity extends AppCompatActivity {
                             eventLocationEditText.setText(event.getLocation());
                             eventDateEditText.setText(event.getDate());
                             eventTimeEditText.setText(event.getTime());
+                            eventTimestamp = event.getTimestamp(); // Get the current timestamp
 
                             if (event.getImage() != null && !event.getImage().isEmpty()) {
                                 Glide.with(this).load(event.getImage()).into(eventImageView);
@@ -70,7 +72,7 @@ public class EditEventActivity extends AppCompatActivity {
         String date = eventDateEditText.getText().toString();
         String time = eventTimeEditText.getText().toString();
 
-        Event updatedEvent = new Event(name, location, date, time, null);
+        Event updatedEvent = new Event(name, location, date, time, null, eventTimestamp);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("events").document(eventId).set(updatedEvent)

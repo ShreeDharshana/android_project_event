@@ -7,17 +7,19 @@ public class Event {
     private String date;
     private String time;
     private String image;
+    private long timestamp;
 
     public Event() {
         // Default constructor required for Firestore
     }
 
-    public Event(String name, String location, String date, String time, String image) {
+    public Event(String name, String location, String date, String time, String image, long timestamp) {
         this.name = name;
         this.location = location;
         this.date = date;
         this.time = time;
         this.image = image;
+        this.timestamp = timestamp;
     }
 
     // Getters and setters
@@ -33,4 +35,6 @@ public class Event {
     public void setTime(String time) { this.time = time; }
     public String getImage() { return image; }
     public void setImage(String image) { this.image = image; }
+    public long getTimestamp() { return timestamp; }
+    public void setTimestamp(long timestamp) { this.timestamp = timestamp; }
 }
