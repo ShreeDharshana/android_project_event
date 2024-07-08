@@ -1,160 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:padding="16dp"
-    android:gravity="center"
-    android:background="@drawable/invitation2"
-    tools:context=".CreateEventActivity">
+    android:background="@drawable/invitation2">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Event Creation"
-        android:textSize="32sp"
-        android:textColor="#4c3228"
-        android:textStyle="bold"
-        android:layout_marginBottom="24dp"
-        android:layout_gravity="center"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Event Name"
-        android:textSize="24sp"
-        android:textColor="#4c3228"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp"
-        android:layout_gravity="start"/>
-
-    <EditText
-        android:id="@+id/edit_text_event_name"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:backgroundTint="#DFCEB4"
-        android:gravity="start"
-        android:background="@drawable/edit_text_border"
-        android:hint="Enter Event Name"
-        android:inputType="text"
-        android:minHeight="48dp"
-        android:padding="10dp"
-        android:textSize="18sp" />
+        android:orientation="vertical"
+        android:gravity="center">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Event Location"
-        android:textColor="#4c3228"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp"
-        android:layout_gravity="start"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Event Creation"
+            android:textSize="32sp"
+            android:textColor="#4c3228"
+            android:textStyle="bold"
+            android:layout_marginBottom="24dp"
+            android:layout_gravity="center"/>
 
-    <EditText
-        android:id="@+id/edit_text_event_location"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:backgroundTint="#DFCEB4"
-        android:background="@drawable/edit_text_border"
-        android:gravity="start"
-        android:hint="Enter Event Location"
-        android:inputType="text"
-        android:minHeight="48dp"
-        android:padding="10dp"
-        android:textSize="18sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Event Name"
+            android:textSize="24sp"
+            android:textColor="#4c3228"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"
+            android:layout_gravity="start"/>
 
-    <TextView
-        android:id="@+id/text_view_event_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Event Date (dd/mm/yyyy)"
-        android:textColor="#4c3228"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp"/>
+        <EditText
+            android:id="@+id/edit_text_event_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:backgroundTint="#DFCEB4"
+            android:gravity="start"
+            android:background="@drawable/edit_text_border"
+            android:hint="Enter Event Name"
+            android:inputType="text"
+            android:minHeight="48dp"
+            android:padding="10dp"
+            android:textSize="18sp" />
 
-    <EditText
-        android:id="@+id/edit_text_event_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/edit_text_border"
-        android:layout_gravity="center"
-        android:layout_marginBottom="20dp"
-        android:backgroundTint="#DFCEB4"
-        android:clickable="true"
-        android:focusable="false"
-        android:gravity="center_horizontal"
-        android:hint="Click here to Select Date"
-        android:inputType="none"
-        android:minHeight="48dp"
-        android:padding="10dp"
-        android:textSize="18sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Event Location"
+            android:textColor="#4c3228"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"
+            android:layout_gravity="start"/>
 
-    <TextView
-        android:id="@+id/text_view_event_time"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Event Time (hh:mm)"
-        android:textColor="#4c3228"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp"/>
+        <EditText
+            android:id="@+id/edit_text_event_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:backgroundTint="#DFCEB4"
+            android:background="@drawable/edit_text_border"
+            android:gravity="start"
+            android:hint="Enter Event Location"
+            android:inputType="text"
+            android:minHeight="48dp"
+            android:padding="10dp"
+            android:textSize="18sp" />
 
-    <EditText
-        android:id="@+id/edit_text_event_time"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="20dp"
-        android:backgroundTint="#DFCEB4"
-        android:clickable="true"
-        android:background="@drawable/edit_text_border"
-        android:focusable="false"
-        android:gravity="center_horizontal"
-        android:hint="Click here to Select Time"
-        android:inputType="none"
-        android:minHeight="48dp"
-        android:padding="10dp"
-        android:textSize="18sp" />
+        <TextView
+            android:id="@+id/text_view_event_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Event Date (dd/mm/yyyy)"
+            android:textColor="#4c3228"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"/>
 
-    <!-- New Section for Image Upload -->
-    <Button
-        android:id="@+id/btn_upload_image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="20dp"
-        android:clickable="true"
-        android:backgroundTint="#A68F6C"
-        android:textColor="@android:color/white"
-        android:focusable="false"
-        android:gravity="center_horizontal"
-        android:minHeight="48dp"
-        android:padding="15dp"
-        android:textSize="18sp"
-        android:text="Upload Event Image" />
+        <EditText
+            android:id="@+id/edit_text_event_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_border"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            android:backgroundTint="#DFCEB4"
+            android:clickable="true"
+            android:focusable="false"
+            android:gravity="center_horizontal"
+            android:hint="Click here to Select Date"
+            android:inputType="none"
+            android:minHeight="48dp"
+            android:padding="10dp"
+            android:textSize="18sp" />
 
-    <ImageView
-        android:id="@+id/image_view_event_image"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="20dp"
-        android:scaleType="centerCrop"
-        android:visibility="gone" />
+        <TextView
+            android:id="@+id/text_view_event_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Event Time (hh:mm)"
+            android:textColor="#4c3228"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"/>
 
-    <Button
-        android:id="@+id/btn_create_event"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Create Event"
-        android:textSize="24sp"
-        android:backgroundTint="#4c3228"
-        android:textColor="@android:color/white"
-        android:layout_gravity="center"/>
+        <EditText
+            android:id="@+id/edit_text_event_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            android:backgroundTint="#DFCEB4"
+            android:clickable="true"
+            android:background="@drawable/edit_text_border"
+            android:focusable="false"
+            android:gravity="center_horizontal"
+            android:hint="Click here to Select Time"
+            android:inputType="none"
+            android:minHeight="48dp"
+            android:padding="10dp"
+            android:textSize="18sp" />
 
-</LinearLayout>
+        <!-- New Section for Image Upload -->
+        <Button
+            android:id="@+id/btn_upload_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            android:clickable="true"
+            android:backgroundTint="#A68F6C"
+            android:textColor="@android:color/white"
+            android:focusable="false"
+            android:gravity="center_horizontal"
+            android:minHeight="48dp"
+            android:padding="15dp"
+            android:textSize="18sp"
+            android:text="Upload Event Image" />
+
+        <ImageView
+            android:id="@+id/image_view_event_image"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btn_create_event"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create Event"
+            android:textSize="24sp"
+            android:backgroundTint="#4c3228"
+            android:textColor="@android:color/white"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+</ScrollView>

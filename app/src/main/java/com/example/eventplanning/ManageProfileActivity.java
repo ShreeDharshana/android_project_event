@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -72,9 +73,12 @@ public class ManageProfileActivity extends AppCompatActivity {
                     if (documentSnapshot.exists()) {
                         String displayName = documentSnapshot.getString("displayName");
                         editTextDisplayName.setText(displayName);
+
                         // Load avatar if available
-                        // Example: String avatarUrl = documentSnapshot.getString("avatarUrl");
-                        // Glide.with(this).load(avatarUrl).into(imageViewAvatar);
+                        String avatarUrl = documentSnapshot.getString("avatarUrl");
+                        if (avatarUrl != null && !avatarUrl.isEmpty()) {
+                            Glide.with(this).load(avatarUrl).into(imageViewAvatar);
+                        }
                     }
                 })
                 .addOnFailureListener(e -> {
@@ -115,10 +119,34 @@ public class ManageProfileActivity extends AppCompatActivity {
 
         // Check if an image is selected
         if (isImageSelected) {
-            uploadAvatar(userId);
+            uploadAvatar(userId, user);
+        } else {
+            // Update user profile data
+            updateUserProfile(userId, user);
         }
+    }
 
-        // Update user profile data
+    private void uploadAvatar(String userId, Map<String, Object> user) {
+        if (imageUri != null) {
+            StorageReference profileImageRef = storageReference.child("avatars/" + userId + ".jpg");
+            profileImageRef.putFile(imageUri)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        // Handle successful upload
+                        profileImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                            String avatarUrl = uri.toString();
+                            user.put("avatarUrl", avatarUrl);
+                            // Update user document with avatarUrl
+                            updateUserProfile(userId, user);
+                        });
+                    })
+                    .addOnFailureListener(e -> {
+                        progressDialog.dismiss();
+                        Toast.makeText(ManageProfileActivity.this, "Failed to upload avatar: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+        }
+    }
+
+    private void updateUserProfile(String userId, Map<String, Object> user) {
         db.collection("users").document(userId).get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -151,33 +179,5 @@ public class ManageProfileActivity extends AppCompatActivity {
                         Toast.makeText(ManageProfileActivity.this, "Error checking user profile: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
-    }
-
-    private void uploadAvatar(String userId) {
-        if (imageUri != null) {
-            StorageReference profileImageRef = storageReference.child("avatars/" + userId + ".jpg");
-            profileImageRef.putFile(imageUri)
-                    .addOnSuccessListener(taskSnapshot -> {
-                        // Handle successful upload
-                        profileImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                            String avatarUrl = uri.toString();
-                            // Update user document with avatarUrl
-                            db.collection("users").document(userId).update("avatarUrl", avatarUrl)
-                                    .addOnCompleteListener(task -> {
-                                        if (task.isSuccessful()) {
-                                            Toast.makeText(ManageProfileActivity.this, "Avatar uploaded successfully", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(ManageProfileActivity.this, "Failed to upload avatar: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                        }
-                                        // Clear imageUri and reset flag
-                                        imageUri = null;
-                                        isImageSelected = false;
-                                    });
-                        });
-                    })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(ManageProfileActivity.this, "Failed to upload avatar: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    });
-        }
     }
 }
