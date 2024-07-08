@@ -1,71 +1,107 @@
 package com.example.eventplanning;
 
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class SendInvitationActivity extends AppCompatActivity {
 
+    private Button btnSendInvitation;
     private EditText editTextInviteeEmail;
-    private Button buttonSendInvitation;
-    private DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_invitation);
 
+        btnSendInvitation = findViewById(R.id.btn_send_invitation);
         editTextInviteeEmail = findViewById(R.id.edit_text_invitee_email);
-        buttonSendInvitation = findViewById(R.id.btn_send_invitation);
-        dbHelper = new DBHelper(this);
 
-        buttonSendInvitation.setOnClickListener(v -> sendInvitation());
+        btnSendInvitation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getMostRecentEventDetails();
+            }
+        });
     }
 
-    private void sendInvitation() {
-        String inviteeEmail = editTextInviteeEmail.getText().toString().trim();
+    private void getMostRecentEventDetails() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("events")
+                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .limit(1)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+                            String name = documentSnapshot.getString("name");
+                            String location = documentSnapshot.getString("location");
+                            String date = documentSnapshot.getString("date");
+                            String time = documentSnapshot.getString("time");
+                            String imageUrl = documentSnapshot.getString("imageUrl");
 
-        if (inviteeEmail.isEmpty()) {
-            editTextInviteeEmail.setError("Please enter the invitee's email");
+                            composeEmail(name, location, date, time, imageUrl);
+                        } else {
+                            Toast.makeText(SendInvitationActivity.this, "No recent event found", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(SendInvitationActivity.this, "Failed to get event details", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void composeEmail(String name, String location, String date, String time, String imageUrl) {
+        String recipientEmail = editTextInviteeEmail.getText().toString().trim();
+        if (recipientEmail.isEmpty()) {
+            Toast.makeText(SendInvitationActivity.this, "Please enter a recipient email address", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Save the invitation in the SQLite database
-        saveInvitationToDatabase(inviteeEmail);
+        String subject = "Invitation to " + name+"!!";
+        String message = "Hey! You have been invited to an event. Please check the event details below.\n\n"
+                + "Event Name: " + name + "\n"
+                + "Location: " + location + "\n"
+                + "Date: " + date + "\n"
+                + "Time: " + time + "\n\n"
+                +"Please contact the event organizer for further details or acknowledge whether you are attending the event or not by responding to this mail.\n\n"
+                + "Thank you!";
 
-        // Create an email intent
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{inviteeEmail});
-        intent.putExtra(Intent.EXTRA_SUBJECT, "You're Invited!");
-        intent.putExtra(Intent.EXTRA_TEXT, "You have been invited to an event. Please check the event details in the app.");
-
-        try {
-            startActivity(Intent.createChooser(intent, "Send Email"));
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(SendInvitationActivity.this, "No email clients installed.", Toast.LENGTH_SHORT).show();
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            message += "Event Image: " + imageUrl + "\n";
         }
+
+        sendEmail(recipientEmail, subject, message);
     }
 
-    private void saveInvitationToDatabase(String email) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+    private void sendEmail(String recipientEmail, String subject, String message) {
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        emailIntent.setType("message/rfc822");
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{recipientEmail});
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        emailIntent.putExtra(Intent.EXTRA_TEXT, message);
 
-        ContentValues values = new ContentValues();
-        values.put(DBHelper.COLUMN_EMAIL, email);
-
-        long newRowId = db.insert(DBHelper.TABLE_INVITATIONS, null, values);
-
-        if (newRowId == -1) {
-            Toast.makeText(SendInvitationActivity.this, "Failed to save invitation.", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(SendInvitationActivity.this, "Invitation saved.", Toast.LENGTH_SHORT).show();
+        try {
+            startActivity(Intent.createChooser(emailIntent, "Send email using..."));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(SendInvitationActivity.this, "No email clients installed.", Toast.LENGTH_SHORT).show();
         }
     }
 }

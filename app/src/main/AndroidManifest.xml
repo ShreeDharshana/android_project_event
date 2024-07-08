@@ -20,6 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EventPlanning"
         tools:targetApi="31">
+
         <activity
             android:name=".LocationServices"
             android:exported="false" />
@@ -33,12 +34,7 @@
         <activity
             android:name=".EditEventActivity"
             android:exported="false" />
-        <activity
-            android:name=".EventDetailsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".EventAdapter"
-            android:exported="false" />
+
         <activity
             android:name=".ViewEventsActivity"
             android:exported="false" />
